@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task0002</title>
+    <link rel="stylesheet" type="text/css" href="CSS/task0002.css">
+</head>
+
+<body>
+<input id="interests" type="text" placeholder="请输入您的爱好,多个爱好请用半角符号,分开">
+<button id="addbtn">确定</button>
+</body>
+<script>
+    /*通过ID获取元素*/
+    function $(id) {
+        return document.getElementById(id);
+    }
+    /*将用户输入的文本存为数组*/
+    function val2Arr() {
+        var arr1=$("interests").value;
+        /*以半角符号,将string分割为array。这里容错性差，后续需要完善*/
+        var arr2=arr1.split(",");
+        /*去重、去空，*/
+        for (var i=0;i<arr2.length;i++){
+            if(arr2.indexOf(arr2[i])<i||arr2[i]===""){
+                arr2.splice(i,1);
+            }
+        }
+        return arr2;
+    }
+    /*将数组追加显示在页面上*/
+    function addInterest(){
+        var interestP = document.createElement("p");
+        var interestPText = document.createTextNode(val2Arr());
+        interestP.appendChild(interestPText);
+        document.body.appendChild(interestP);
+    }
+    /*为button绑定click事件监听器*/
+    function initEvent() {
+        $("addbtn").addEventListener("click", addInterest, false);
+    }
+
+    initEvent();
+</script>
+</html>

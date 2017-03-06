@@ -1,0 +1,13 @@
+body input,button{
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+}
+
+#interests{
+    width: 300px;
+}
+#addbtn{
+    width: 100px;
+    height: 20px;
+}
