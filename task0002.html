@@ -18,28 +18,37 @@
     /*将用户输入的文本存为数组*/
     function val2Arr() {
         var arr1=$("interests").value;
-        /*以半角符号,将string分割为array。这里容错性差，后续需要完善*/
-        var arr2=arr1.split(",");
-        /*去重、去空，*/
-        for (var i=0;i<arr2.length;i++){
-            if(arr2.indexOf(arr2[i])<i||arr2[i]===""){
-                arr2.splice(i,1);
-            }
-        }
-        return arr2;
+        /*正则表达式，限制用户输入内容的类型*/
+        var reg = /^[\w\u4e00-\u9fa5\uf900-\ufa2d,]*$/;
+        var arrSplited , newArr = new Array();
+        /*检查用户输入的内容是否满足类型要求*/
+        if (reg.test(arr1)){
+            arrSplited = arr1.split(",");
+            /*用filter过滤掉重复元素和空元素*/
+            newArr = arrSplited.filter(function(value,index,arr){
+                return value != ""&&arr.indexOf(value) == index;
+            });
+        } else {
+            alert("无法识别的字符，请重新输入您的兴趣爱好并以半角符号,将多个兴趣分开");
+            $("interests").value= "";
+        };
+        return newArr;
     }
     /*将数组追加显示在页面上*/
     function addInterest(){
         var interestP = document.createElement("p");
         var interestPText = document.createTextNode(val2Arr());
-        interestP.appendChild(interestPText);
-        document.body.appendChild(interestP);
+        /*如果用户输入的内容不满足类型要求，则不将数组追加到页面上*/
+        if (interestPText.length!=0){
+            interestP.appendChild(interestPText);
+            document.body.appendChild(interestP);
+        }
     }
     /*为button绑定click事件监听器*/
     function initEvent() {
+        /*监听器第二个参数是指向函数的指针，不加()，click触发时自动调用；加()则函数立即执行，等同于函数返回值*/
         $("addbtn").addEventListener("click", addInterest, false);
     }
-
     initEvent();
 </script>
 </html>
