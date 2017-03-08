@@ -7,8 +7,12 @@
 </head>
 
 <body>
-<input id="interests" type="text" placeholder="请输入您的爱好,多个爱好请用半角符号,分开">
-<button id="addbtn">确定</button>
+<div id="container">
+    <textarea id="interests" type="text" placeholder="请输入您的爱好,多个爱好请用符号[逗号、分号、顿号、空格、换行]分开"></textarea>
+    <p id="warningP"></p>
+    <button id="addbtn">确定</button>
+    <p id="inputP"></p>
+</div>
 </body>
 <script>
     /*通过ID获取元素*/
@@ -19,30 +23,38 @@
     function val2Arr() {
         var arr1=$("interests").value;
         /*正则表达式，限制用户输入内容的类型*/
-        var reg = /^[\w\u4e00-\u9fa5\uf900-\ufa2d,]*$/;
+        var reg = /^[\w\u4e00-\u9fa5\uf900-\ufa2d,， ；;、\n]*$/;
         var arrSplited , newArr = new Array();
         /*检查用户输入的内容是否满足类型要求*/
         if (reg.test(arr1)){
-            arrSplited = arr1.split(",");
+            arrSplited = arr1.split(/[,，     ；;、\n]/);
             /*用filter过滤掉重复元素和空元素*/
             newArr = arrSplited.filter(function(value,index,arr){
                 return value != ""&&arr.indexOf(value) == index;
             });
         } else {
-            alert("无法识别的字符，请重新输入您的兴趣爱好并以半角符号,将多个兴趣分开");
-            $("interests").value= "";
+            $("warningP").innerText = "无法识别的字符！";
         };
         return newArr;
     }
     /*将数组追加显示在页面上*/
     function addInterest(){
-        var interestP = document.createElement("p");
-        var interestPText = document.createTextNode(val2Arr());
+        $("inputP").innerText = "";
+        $("warningP").innerText = "";
         /*如果用户输入的内容不满足类型要求，则不将数组追加到页面上*/
-        if (interestPText.length!=0){
-            interestP.appendChild(interestPText);
-            document.body.appendChild(interestP);
-        }
+        if($("interests").value == ""){
+            $("warningP").innerText = "请至少输入一个爱好！";
+            return;
+        } else {
+            var finalArr = val2Arr();
+            if (finalArr.length>10){
+                $("warningP").innerText = "请输入少于十个爱好！";
+                return;
+            } else if (finalArr.length>0&&finalArr.length<10) {
+                $("inputP").innerText = val2Arr();
+                $("interests").value = "";
+            }
+        };
     }
     /*为button绑定click事件监听器*/
     function initEvent() {
