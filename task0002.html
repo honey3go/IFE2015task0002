@@ -10,8 +10,8 @@
 <div id="container">
     <textarea id="interests" type="text" placeholder="请输入您的爱好,多个爱好请用符号[逗号、分号、顿号、空格、换行]分开"></textarea>
     <p id="warningP"></p>
-    <button id="addbtn">确定</button>
-    <p id="inputP"></p>
+    <button id="addbtn">确定</button>    
+    <div id="subContainer"></div>
 </div>
 </body>
 <script>
@@ -19,18 +19,34 @@
     function $(id) {
         return document.getElementById(id);
     }
+    function creatNewInerests(finalArr){
+    	var addParentNode = $("subContainer");
+    	for(var i=0;i<finalArr.length;i++){
+    		var childInput = document.createElement("input");
+    		childInput.setAttribute("type","checkbox");
+            childInput.setAttribute("id","finalArr"+i);
+            var childLable = document.createElement("label");
+            childLable.setAttribute("for","finalArr"+i);
+            childLable.setAttribute("class","childLabel");
+            childLable.innerText = finalArr[i];
+            /*追加元素*/
+			addParentNode.appendChild(childInput);
+			addParentNode.appendChild(childLable);
+    	}
+    }
     /*将用户输入的文本存为数组*/
     function val2Arr() {
         var arr1=$("interests").value;
         /*正则表达式，限制用户输入内容的类型*/
         var reg = /^[\w\u4e00-\u9fa5\uf900-\ufa2d,， ；;、\n]*$/;
-        var arrSplited , newArr = new Array();
+        var arrSplited = new Array();
+        var newArr;
         /*检查用户输入的内容是否满足类型要求*/
         if (reg.test(arr1)){
             arrSplited = arr1.split(/[,，     ；;、\n]/);
             /*用filter过滤掉重复元素和空元素*/
             newArr = arrSplited.filter(function(value,index,arr){
-                return value != ""&&arr.indexOf(value) == index;
+            return value != ""&&arr.indexOf(value) == index;                                                                                                                                          
             });
         } else {
             $("warningP").innerText = "无法识别的字符！";
@@ -38,23 +54,26 @@
         return newArr;
     }
     /*将数组追加显示在页面上*/
-    function addInterest(){
-        $("inputP").innerText = "";
+    function addInterest(){        
         $("warningP").innerText = "";
-        /*如果用户输入的内容不满足类型要求，则不将数组追加到页面上*/
-        if($("interests").value == ""){
+        /*删除上一次输入创建的子节点*/
+    	var delParentNode = $("subContainer");
+        var delNodeList = delParentNode.childNodes;
+        if (delNodeList != 0){
+	        for (var i = delNodeList.length-1; i>=0;i--){
+        	delParentNode.removeChild(delNodeList[i]);
+        	}
+        }
+        /*判断用户输入的爱好数量是否位在0-10个之间*/
+        var finalArr = val2Arr();
+        if(finalArr.length == 0){
             $("warningP").innerText = "请至少输入一个爱好！";
-            return;
-        } else {
-            var finalArr = val2Arr();
-            if (finalArr.length>10){
-                $("warningP").innerText = "请输入少于十个爱好！";
-                return;
-            } else if (finalArr.length>0&&finalArr.length<10) {
-                $("inputP").innerText = val2Arr();
-                $("interests").value = "";
-            }
-        };
+        } else if (finalArr.length>10) {          
+            $("warningP").innerText = "请输入少于十个爱好！";
+        } else {   
+            creatNewInerests(finalArr);             
+            $("interests").value = "";
+        };            
     }
     /*为button绑定click事件监听器*/
     function initEvent() {
