@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task0002_2</title>
+    <link type="text/javascript" src="JS\task0002_2.js">
+</head>
+<body>
+<div>
+    <label>请选择任意时间:</label>
+    <input type="date" id="writeIn">
+    <button id="buttonTime">确定</button>
+</div>
+</body>
+<script>
+    /*通过ID获取元素*/
+    function $(id) {
+        return document.getElementById(id);
+    }
+    function addTime(){
+        /*获取用户输入的日期*/
+        var dateInput = new Date($("writeIn").value);
+        /*获取当前日期并转化为Date类型*/
+        var dateNew = new Date();
+        var dateNewStr = dateNew.toLocaleDateString().split("/");
+        var dateNow = new Date();
+        dateNow.setFullYear(dateNewStr[0]);
+        dateNow.setMonth(dateNewStr[1]-1);
+        dateNow.setDate(dateNewStr[2]);
+        /*求两日期相差的秒数。用户输入的日期默认时间为早八点，为表示凌晨，需要减去8小时*/
+        var diffSeconds = (dateInput.getTime()-dateNow.getTime()-28800000)/1000;
+        if (diffSeconds>0){
+            calcuTime(diffSeconds);
+        } else {
+            alert("请输入一个大于当前时间的日期");
+        };
+    }
+    /*计算时间间隔X天X小时X秒*/
+    function calcuTime(diffSeconds){
+        var diffTime = new Array();
+        /*换算*/
+        var calcuNum = [6400,3600,60,1];
+        for (var i = 0 ; i < 4 ; i++){
+            diffTime[i] = parseInt(diffSeconds/calcuNum[i]);
+            diffSeconds=diffSeconds-calcuNum[i]*diffTime[i];
+        }
+        alert("距离输入时间还有"+diffTime[0]+"天"+diffTime[1]+"小时"+diffTime[2]+"分"+diffTime[3]+"秒");
+    }
+    function initEvent() {
+        /*监听器第二个参数是指向函数的指针，不加()，click触发时自动调用；加()则函数立即执行，等同于函数返回值*/
+        $("buttonTime").addEventListener("click", addTime, false);
+    }
+    initEvent()
+</script>
+</html>
