@@ -10,16 +10,18 @@
     <label>请选择任意时间:</label>
     <input type="date" id="writeIn">
     <button id="buttonTime">确定</button>
+    <h3 id="timeText"></h3>
+    <h1 id="countDown"></h1>
 </div>
 </body>
 <script>
+    var residualTime,interval;
     /*通过ID获取元素*/
     function $(id) {
         return document.getElementById(id);
     }
+
     function addTime(){
-        /*获取用户输入的日期*/
-        var dateInput = new Date($("writeIn").value);
         /*获取当前日期并转化为Date类型*/
         var dateNew = new Date();
         var dateNewStr = dateNew.toLocaleDateString().split("/");
@@ -27,10 +29,14 @@
         dateNow.setFullYear(dateNewStr[0]);
         dateNow.setMonth(dateNewStr[1]-1);
         dateNow.setDate(dateNewStr[2]);
+        /*获取用户输入的日期*/
+        var dateInput = new Date($("writeIn").value);
         /*求两日期相差的秒数。用户输入的日期默认时间为早八点，为表示凌晨，需要减去8小时*/
         var diffSeconds = (dateInput.getTime()-dateNow.getTime()-28800000)/1000;
         if (diffSeconds>0){
-            calcuTime(diffSeconds);
+            residualTime = calcuTime(diffSeconds);
+            $("timeText").innerText = "距"+dateInput.getFullYear()+"年"+(dateInput.getMonth()+1)+"月"+dateInput.getDate()+"日还有";
+            interval = setInterval("minusTime(residualTime,3)","1000");
         } else {
             alert("请输入一个大于当前时间的日期");
         };
@@ -39,12 +45,52 @@
     function calcuTime(diffSeconds){
         var diffTime = new Array();
         /*换算*/
-        var calcuNum = [6400,3600,60,1];
+        var calcuNum = [86400,3600,60,1];
         for (var i = 0 ; i < 4 ; i++){
             diffTime[i] = parseInt(diffSeconds/calcuNum[i]);
             diffSeconds=diffSeconds-calcuNum[i]*diffTime[i];
         }
-        alert("距离输入时间还有"+diffTime[0]+"天"+diffTime[1]+"小时"+diffTime[2]+"分"+diffTime[3]+"秒");
+        //diffTime=[0,0,0,10];
+        return diffTime;
+    }
+    /*var scaleNum = [0,23,59,59];
+    function minusT(diffTime,num){
+    	if (diffTime[num]>0) {
+    		diffTime[num]--;
+    	} else {
+    		if (num != 0){
+    			diffTime[num] = scaleNum[num];
+    			minusT(diffTime,num-1);
+    		} else {  			   			
+    			diffTime = [0,0,0,0];
+    			clearInterval(interval);
+    		};
+    	};
+    	$("countDown").innerText = diffTime[0] + "天" + diffTime[1] + "小时" + diffTime[2] + "分" + diffTime[3] + "秒";	
+    }*/
+    function minusTime(diffTime){
+    	if (diffTime[3]>0){
+    		diffTime[3]--;
+    	} else {
+    		diffTime[3] = 59;
+    		if (diffTime[2]>0){
+    			diffTime[2]--;
+    		} else {
+    			diffTime[2] = 59;
+    			if (diffTime[1]>0){
+		    		diffTime[1]--;
+    			} else {
+    				diffTime[1] = 23;
+    				if(diffTime[0]>0){
+    					diffTime[0]--;
+    				} else {
+    					diffTime=[0,0,0,0];
+    					clearInterval(interval);
+    				};
+    			};
+    		};
+    	};    	
+    	$("countDown").innerText = diffTime[0] + "天" + diffTime[1] + "小时" + diffTime[2] + "分" + diffTime[3] + "秒";
     }
     function initEvent() {
         /*监听器第二个参数是指向函数的指针，不加()，click触发时自动调用；加()则函数立即执行，等同于函数返回值*/
