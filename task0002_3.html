@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <link rel="stylesheet" type="text/css" href="css\task0002_3.css">
+</head>
+<body>
+<div id="picDiv">
+    <ul id="picUl">
+        <li><img src="IMG\1.jpg"></li>
+        <li><img src="IMG\2.jpg"></li>
+        <li><img src="IMG\3.jpg"></li>
+    </ul>
+    <div id="spanDiv">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+</body>
+<script>
+    function $(id) {
+        return document.getElementById(id);
+    }
+    var picMagLft = $("picUl").offsetLeft;
+    console.log(picMagLft);
+</script>
+</html>
