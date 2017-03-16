@@ -3,8 +3,18 @@ body,div,ul,span,ul,li{
     padding: 0;
 }
 span{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
     border: 2px black solid;
-    border-radius: 2px;
+    border-radius: 30px;
+
+}
+.changeBackground{
+    background: black;
+}
+#spanDiv{
+    text-align: center;
 }
 #picDiv{
     width: 100%;
@@ -12,7 +22,6 @@ span{
 }
 #picUl{
     width: 300%;
-    margin-left: -10px;
 }
 #picUl li{
     width: 33.33%;

@@ -13,17 +13,41 @@
         <li><img src="IMG\3.jpg"></li>
     </ul>
     <div id="spanDiv">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span id="span1"></span>
+        <span id="span2"></span>
+        <span id="span3"></span>
     </div>
 </div>
 </body>
 <script>
-    function $(id) {
-        return document.getElementById(id);
-    }
-    var picMagLft = $("picUl").offsetLeft;
-    console.log(picMagLft);
+var interval;
+$("span1").className = "changeBackground";
+function $(id) {
+    return document.getElementById(id);
+}
+/*自动轮播*/
+function rollPic(){
+	
+	var ulWidth = $("picDiv").offsetWidth; 
+	var nowMargin = $("picUl").offsetLeft;       
+	var newMargin = nowMargin-ulWidth/1000;
+	if(Math.abs(newMargin)<ulWidth){
+		$("span1").className = "";
+		$("span3").className = "";
+		$("span2").className = "changeBackground";
+		$("picUl").style.marginLeft=newMargin+"px";		
+	} else if (Math.abs(newMargin)<2*ulWidth){
+		$("span1").className = "";
+		$("span2").className = "";
+		$("span3").className = "changeBackground";
+		$("picUl").style.marginLeft=newMargin+"px";		
+	} else {
+		clearInterval(interval);
+	};
+}
+function init(){	
+	interval =  setInterval(rollPic,10);
+}
+setTimeout(init,5000);
 </script>
 </html>
