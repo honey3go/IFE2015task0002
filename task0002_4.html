@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task0002-04</title>
+</head>
+<style>
+span{
+    color:red;
+}
+div{
+    width:173px;
+}
+.highlight{
+    background:blue;
+}
+</style>
+<body>
+<div id="container">   
+    <input id='Ipt'>
+    <div id='te'></div>
+</div>
+</body>
+<script>
+    /*通过ID获取元素*/
+    function $(id) {
+        return document.getElementById(id);
+    }
+    var suggestData = ['test', 'test1234', 'testhaha','ew'];
+    var arr = new Array();
+    function interact (){
+        var iptTxt = $('Ipt').value;
+        var htmlTxt = '';        
+        suggestData.filter(function(item){
+                        return item.indexOf(iptTxt) === 0;
+                    })
+                    .forEach(function(item,index){
+                        arr[index] = '<div><span>'+iptTxt+'</span>'+item.slice(iptTxt.length)+'</div>';                     
+                    });
+        console.log(arr);
+        for (var i in arr){
+            htmlTxt = htmlTxt+arr[i];
+        }
+        console.log(htmlTxt);
+        $('te').innerHTML = htmlTxt;
+    }
+    function creat(){
+        var agentDisDiv = $("te");
+        agentDisDiv.onclick = function(ev){
+          var ev = ev||window.event;
+          var target = ev.target||ev.srcElement;
+          if (target.nodeName.toLowerCase() == "div"){
+              $('Ipt').value = target.innerText;              
+            }
+        }
+        agentDisDiv.onmouseover = function(ev){
+          var ev = ev||window.event;
+          var target = ev.target||ev.srcElement;
+          if (target.nodeName.toLowerCase() == "div"){
+              target.className = 'highlight';              
+            }
+        }
+        agentDisDiv.onmouseout = function(ev){
+          var ev = ev||window.event;
+          var target = ev.target||ev.srcElement;
+          if (target.nodeName.toLowerCase() == "div"){
+              target.className = '';              
+            }
+        }
+    }
+    creat();
+    function init(){
+        $('Ipt').addEventListener('change',interact,false);
+    }
+    init();
+</script>
+</html>
